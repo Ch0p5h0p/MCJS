@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "mcjs",
+  "version": "${version}",
+  "name": "MCJS",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/mcjs/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "fabric-datagen": [
+      "org.Ch0p5h0p.mcjs.client.McjsDataGenerator"
+    ],
+    "client": [
+      "org.Ch0p5h0p.mcjs.client.McjsClient"
+    ],
+    "main": [
+      "org.Ch0p5h0p.mcjs.Mcjs"
+    ]
+  },
+  "mixins": [
+    "mcpython.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric-api": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
