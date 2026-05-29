@@ -46,6 +46,14 @@ public class ScriptManager {
         }
     }
 
+    public static void deleteFile(File file) {
+        try {
+            Files.delete(file.toPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static String listFiles() throws IOException {
         List<Path> files = Files.list(getModFolder()).collect(Collectors.toList());
         StringBuilder sb = new StringBuilder();

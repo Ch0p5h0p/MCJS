@@ -36,6 +36,15 @@ public class McjsClient implements ClientModInitializer {
                             )
 
             );
+            dispatcher.register(ClientCommandManager.literal("delFile")
+                    .then(ClientCommandManager.argument("fileName", StringArgumentType.string())
+                            .executes(context -> {
+                                ScriptManager.deleteFile(ScriptManager.getFile(StringArgumentType.getString(context, "fileName")));
+                                return 1;
+                            })
+                    )
+
+            );
             dispatcher.register(ClientCommandManager.literal("listFiles")
                     .executes(context -> {
                         try {
@@ -116,6 +125,7 @@ public class McjsClient implements ClientModInitializer {
                 
                 COMMANDS:
                 /codeWindow <filename>  : open or create a file
+                /delFile <filename>     : delete a file
                 /listFiles              : list all available files
                 /runFile <filename>     : run a JS file
                 /repl <code>            : run some code in the repl

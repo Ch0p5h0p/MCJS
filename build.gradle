@@ -58,10 +58,11 @@ dependencies {
 
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-    //implementation 'io.webfolder:quickjs:1.1.0'
-    //include 'io.webfolder:quickjs:1.1.0'
     implementation 'io.github.stefanrichterhuber:quickjs-java:2.0.2'
     include 'io.github.stefanrichterhuber:quickjs-java:2.0.2'
+
+    implementation 'org.questdb:jar-jni:1.1.1'
+    include 'org.questdb:jar-jni:1.1.1'
 }
 
 processResources {
