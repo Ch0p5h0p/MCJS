@@ -1,4 +1,4 @@
-package org.Ch0p5h0p.mcjs.client.execution.libraries;
+package org.Ch0p5h0p.mcjs.client.libraries;
 
 import io.github.stefanrichterhuber.quickjs.QuickJSContext;
 import net.minecraft.ChatFormatting;
@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class LibCollector {
@@ -21,6 +22,10 @@ public class LibCollector {
             return;
         }
         loadedLibs.put(lib.name(), lib);
+    }
+
+    public static List<String> getLibList() {
+        return loadedLibs.keySet().stream().toList();
     }
 
     public static String getLibNames() {

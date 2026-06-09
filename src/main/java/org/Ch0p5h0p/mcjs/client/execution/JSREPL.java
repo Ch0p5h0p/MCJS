@@ -2,7 +2,7 @@ package org.Ch0p5h0p.mcjs.client.execution;
 
 import io.github.stefanrichterhuber.quickjs.QuickJSContext;
 import io.github.stefanrichterhuber.quickjs.QuickJSRuntime;
-import org.Ch0p5h0p.mcjs.client.execution.libraries.LibCollector;
+import org.Ch0p5h0p.mcjs.client.libraries.LibCollector;
 
 public class JSREPL {
     private QuickJSRuntime rt;

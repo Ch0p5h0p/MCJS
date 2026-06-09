@@ -1,9 +1,6 @@
-package org.Ch0p5h0p.mcjs.client.execution.libraries;
+package org.Ch0p5h0p.mcjs.client.libraries;
 
-import com.jcraft.jorbis.Block;
-import com.mojang.authlib.minecraft.client.MinecraftClient;
 import io.github.stefanrichterhuber.quickjs.QuickJSContext;
-import net.fabricmc.fabric.mixin.networking.client.accessor.MinecraftAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -20,16 +17,16 @@ public class Stdlib implements Lib {
     @Override
     public void init(QuickJSContext ctx) {
 
+        Minecraft client = Minecraft.getInstance();
+
         // chat API
         Map<String, Object> chat = new HashMap<>();
         chat.put("send", (Consumer<String>) (text) -> {
-            Minecraft.getInstance().getConnection().sendChat(text);
+            client.getConnection().sendChat(text);
         });
         chat.put("log", (Consumer<String>) (text) -> {
-            Minecraft.getInstance().player.displayClientMessage(Component.literal(text), false);
+            client.player.displayClientMessage(Component.literal(text), false);
         });
-
-        ctx.setGlobal("chat", chat);
 
         /*TODO: implement stuff for
            [ ] interaction (interact, place, attack)
@@ -46,9 +43,8 @@ public class Stdlib implements Lib {
         *  */
 
         // interaction API
-        Map<String, Object> interaction = new HashMap<>();
-        interaction.put("attack", (Supplier<String>) () -> {
-            Minecraft client = Minecraft.getInstance();
+        Map<String, Object> player = new HashMap<>();
+        player.put("attack", (Supplier<String>) () -> {
 
             if (client.player == null) return null;
             HitResult hit = client.hitResult;
@@ -75,8 +71,7 @@ public class Stdlib implements Lib {
 
             return null;
         });
-        interaction.put("interact", (Supplier<Void>) () -> {
-            Minecraft client = Minecraft.getInstance();
+        player.put("interact", (Supplier<Void>) () -> {
 
             if (client.player != null) {
                 InteractionHand hand = InteractionHand.MAIN_HAND;
@@ -86,8 +81,18 @@ public class Stdlib implements Lib {
             }
             return null;
         });
+        player.put("yawTo", (Consumer<Number>) (degrees) -> {
+            assert client.player != null;
+            client.execute(() -> {client.player.setYRot(degrees.floatValue());});
+        });
+        player.put("pitchTo", (Consumer<Number>) (degrees) -> {
+            assert client.player != null;
+            client.execute(() -> {client.player.setXRot(degrees.floatValue());});
+        });
 
-        ctx.setGlobal("player", interaction);
+
+        ctx.setGlobal("chat", chat);
+        ctx.setGlobal("player", player);
     }
 
     @Override

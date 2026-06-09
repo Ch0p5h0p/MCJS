@@ -54,12 +54,19 @@ public class ScriptManager {
         }
     }
 
-    public static String listFiles() throws IOException {
+
+    public static List<String> getFileNames() throws IOException {
         List<Path> files = Files.list(getModFolder()).collect(Collectors.toList());
+        List<String> names = files.stream().map((file) -> file.getFileName().toString()).toList();
+        return names;
+    }
+
+    public static String listFiles() throws IOException {
+        List<String> files = getFileNames();
         StringBuilder sb = new StringBuilder();
 
-        for (Path file : files) {
-            sb.append(file.toFile().getName() + "\n");
+        for (String file : files) {
+            sb.append(file + "\n");
         }
         return sb.toString();
     }

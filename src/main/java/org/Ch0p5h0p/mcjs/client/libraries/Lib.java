@@ -1,4 +1,4 @@
-package org.Ch0p5h0p.mcjs.client.execution.libraries;
+package org.Ch0p5h0p.mcjs.client.libraries;
 
 import io.github.stefanrichterhuber.quickjs.QuickJSContext;
 

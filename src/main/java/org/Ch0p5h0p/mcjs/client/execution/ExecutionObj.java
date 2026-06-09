@@ -4,7 +4,7 @@ import io.github.stefanrichterhuber.quickjs.QuickJSContext;
 import io.github.stefanrichterhuber.quickjs.QuickJSRuntime;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import org.Ch0p5h0p.mcjs.client.execution.libraries.LibCollector;
+import org.Ch0p5h0p.mcjs.client.libraries.LibCollector;
 
 public class ExecutionObj {
     private String fileName;

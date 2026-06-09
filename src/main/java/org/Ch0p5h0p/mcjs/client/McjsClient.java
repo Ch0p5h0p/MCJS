@@ -9,11 +9,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import org.Ch0p5h0p.mcjs.client.execution.JSExecutor;
 import org.Ch0p5h0p.mcjs.client.execution.JSREPL;
-import org.Ch0p5h0p.mcjs.client.execution.libraries.LibCollector;
-import org.Ch0p5h0p.mcjs.client.execution.libraries.Stdlib;
+import org.Ch0p5h0p.mcjs.client.libraries.LibCollector;
+import org.Ch0p5h0p.mcjs.client.libraries.LibDocsScreen;
+import org.Ch0p5h0p.mcjs.client.libraries.Stdlib;
 import org.Ch0p5h0p.mcjs.client.scripting.ScriptManager;
 
 import java.io.IOException;
+import java.util.List;
 
 public class McjsClient implements ClientModInitializer {
 
@@ -28,7 +30,19 @@ public class McjsClient implements ClientModInitializer {
 
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) -> {
             dispatcher.register(ClientCommandManager.literal("codeWindow")
-                            .then(ClientCommandManager.argument("fileName", StringArgumentType.string())
+                    .then(ClientCommandManager.argument("fileName", StringArgumentType.string())
+                                    .suggests((ctx, builder) -> {
+                                        try {
+                                            List<String> filenames = ScriptManager.getFileNames();
+                                            for (String name: filenames) {
+                                                builder.suggest(name);
+                                            }
+                                        } catch (IOException e) {
+                                            throw new RuntimeException(e);
+                                        }
+
+                                        return builder.buildFuture();
+                                    })
                                     .executes(context -> {
                                         ScriptManager.openFile(StringArgumentType.getString(context, "fileName"));
                                         return 1;
@@ -38,6 +52,18 @@ public class McjsClient implements ClientModInitializer {
             );
             dispatcher.register(ClientCommandManager.literal("delFile")
                     .then(ClientCommandManager.argument("fileName", StringArgumentType.string())
+                            .suggests((ctx, builder) -> {
+                                try {
+                                    List<String> filenames = ScriptManager.getFileNames();
+                                    for (String name: filenames) {
+                                        builder.suggest(name);
+                                    }
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
+
+                                return builder.buildFuture();
+                            })
                             .executes(context -> {
                                 ScriptManager.deleteFile(ScriptManager.getFile(StringArgumentType.getString(context, "fileName")));
                                 return 1;
@@ -57,6 +83,18 @@ public class McjsClient implements ClientModInitializer {
             );
             dispatcher.register(ClientCommandManager.literal("runFile")
                     .then(ClientCommandManager.argument("fileName", StringArgumentType.string())
+                            .suggests((ctx, builder) -> {
+                                try {
+                                    List<String> filenames = ScriptManager.getFileNames();
+                                    for (String name: filenames) {
+                                        builder.suggest(name);
+                                    }
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
+
+                                return builder.buildFuture();
+                            })
                             .executes(context -> {
                                 try {
                                     String output = JSExecutor.runScript(ScriptManager.getFile(
@@ -98,11 +136,25 @@ public class McjsClient implements ClientModInitializer {
             );
             dispatcher.register(ClientCommandManager.literal("libDocs")
                     .then(ClientCommandManager.argument("library name", StringArgumentType.string())
+                            .suggests((ctx, builder) -> {
+                                List<String> libnames = LibCollector.getLibList();
+                                for (String name : libnames) {
+                                    builder.suggest(name);
+                                }
+                                return builder.buildFuture();
+                            })
                             .executes(context -> {
-                                Minecraft.getInstance().player.displayClientMessage(
+                                String libname = StringArgumentType.getString(context, "library name");
+                                Minecraft.getInstance().execute(() -> {
+                                    Minecraft.getInstance().setScreen(new LibDocsScreen(
+                                            libname,
+                                            LibCollector.getLibDoc(libname)
+                                    ));
+                                });
+                                /*Minecraft.getInstance().player.displayClientMessage(
                                         Component.literal(
                                                 LibCollector.getLibDoc(StringArgumentType.getString(context, "library name"))
-                                        ), false);
+                                        ), false);*/
                                 return 1;
                             })
                     )
