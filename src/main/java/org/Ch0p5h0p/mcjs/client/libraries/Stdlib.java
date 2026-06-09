@@ -103,9 +103,6 @@ public class Stdlib implements Lib {
     @Override
     public String docs() {
         return """
-                VARIABLES:
-                - username -> string : contains the active player's username
-                
                 FUNCTIONS:
                 > chat
                 - send(text) -> void : sends a message to the server
